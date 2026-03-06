@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { getArticles, createArticle, updateArticle, deleteArticle, uploadImage } from '../lib/api';
 
 const CATEGORIES = ['Football', 'Cricket', 'Rugby', 'Tennis', 'Golf', 'Cycling', 'Others'];
 
 export default function AdminPage() {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -120,39 +123,53 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-bg-dark text-text">
-      <header className="bg-bg-card border-b border-border sticky top-0 z-10">
+    <div className="min-h-screen text-white f1-dashboard-bg">
+      <header className="sticky top-0 z-10 border-b border-white/10 bg-black/60 backdrop-blur-md">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-bold text-white">Admin – Articles</h1>
-          <Link
-            to="/"
-            className="text-accent hover:text-accent-dim no-underline hover:no-underline text-sm font-medium"
-          >
-            ← Back to site
-          </Link>
+          <div className="flex items-center gap-3">
+            <span className="text-lg font-bold tracking-wider" style={{ color: '#00d4ff', textShadow: '0 0 12px rgba(0,212,255,0.4)' }}>
+              F1 ADMIN
+            </span>
+            <span className="text-sm text-white/60 font-medium tracking-widest uppercase">Articles</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <button
+              type="button"
+              onClick={() => { logout(); navigate('/admin/login'); }}
+              className="text-sm font-medium text-white/70 hover:text-[#00d4ff] transition-colors"
+            >
+              Sign out
+            </button>
+            <Link
+              to="/"
+              className="text-sm font-medium text-[#00d4ff] hover:text-[#70eeff] no-underline transition-colors"
+            >
+              ← Back to site
+            </Link>
+          </div>
         </div>
       </header>
 
       <main className="max-w-3xl mx-auto px-6 py-8">
-        <section className="bg-bg-card rounded-2xl p-6 mb-10">
-          <h2 className="text-lg font-semibold text-white mb-6">
+        <section className="f1-dashboard-panel mb-10">
+          <h2 className="text-xl font-bold text-white mb-6 tracking-wide" style={{ textShadow: '0 0 12px rgba(255,255,255,0.15)' }}>
             {editingId ? 'Edit article' : 'Add new article'}
           </h2>
 
           {error && (
-            <div className="mb-4 p-4 rounded-xl bg-red-500/20 text-red-300 text-sm">
+            <div className="mb-4 p-4 rounded-xl bg-red-500/20 text-red-300 text-sm border border-red-500/30">
               {error}
             </div>
           )}
           {success && (
-            <div className="mb-4 p-4 rounded-xl bg-green-500/20 text-green-300 text-sm">
+            <div className="mb-4 p-4 rounded-xl bg-emerald-500/20 text-emerald-300 text-sm border border-emerald-500/30">
               {success}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-text-muted mb-2">
+              <label className="block text-xs font-semibold text-white/70 uppercase tracking-wider mb-2">
                 Title *
               </label>
               <input
@@ -160,19 +177,19 @@ export default function AdminPage() {
                 value={form.title}
                 onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
                 placeholder="e.g. Big match preview"
-                className="w-full px-4 py-3 rounded-xl bg-bg-dark border border-border text-text placeholder:text-text-muted focus:outline-none focus:border-accent"
+                className="f1-dashboard-input"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-muted mb-2">
+              <label className="block text-xs font-semibold text-white/70 uppercase tracking-wider mb-2">
                 Category
               </label>
               <select
                 value={form.category}
                 onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
-                className="w-full px-4 py-3 rounded-xl bg-bg-dark border border-border text-text focus:outline-none focus:border-accent"
+                className="f1-dashboard-input f1-dashboard-select"
               >
                 {CATEGORIES.map((c) => (
                   <option key={c} value={c}>{c}</option>
@@ -181,7 +198,7 @@ export default function AdminPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-muted mb-2">
+              <label className="block text-xs font-semibold text-white/70 uppercase tracking-wider mb-2">
                 Short description (shown in lists)
               </label>
               <textarea
@@ -189,12 +206,12 @@ export default function AdminPage() {
                 onChange={(e) => setForm((f) => ({ ...f, excerpt: e.target.value }))}
                 placeholder="One or two sentences about the article"
                 rows={2}
-                className="w-full px-4 py-3 rounded-xl bg-bg-dark border border-border text-text placeholder:text-text-muted focus:outline-none focus:border-accent resize-none"
+                className="f1-dashboard-input resize-none"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-muted mb-2">
+              <label className="block text-xs font-semibold text-white/70 uppercase tracking-wider mb-2">
                 Full article content
               </label>
               <textarea
@@ -202,40 +219,40 @@ export default function AdminPage() {
                 onChange={(e) => setForm((f) => ({ ...f, body: e.target.value }))}
                 placeholder="Write your article here..."
                 rows={6}
-                className="w-full px-4 py-3 rounded-xl bg-bg-dark border border-border text-text placeholder:text-text-muted focus:outline-none focus:border-accent resize-y"
+                className="f1-dashboard-input resize-y"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-muted mb-2">
+              <label className="block text-xs font-semibold text-white/70 uppercase tracking-wider mb-2">
                 Cover image
               </label>
               <input
                 type="file"
                 accept="image/jpeg,image/png,image/gif,image/webp"
                 onChange={handleImageChange}
-                className="w-full text-sm text-text-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-accent/20 file:text-accent file:font-medium"
+                className="w-full text-sm text-white/60 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#00d4ff]/20 file:text-[#00d4ff] file:font-semibold file:cursor-pointer"
               />
               {imagePreview && (
-                <div className="mt-3">
+                <div className="mt-3 rounded-xl overflow-hidden border border-white/20" style={{ boxShadow: '0 0 20px rgba(0,212,255,0.1)' }}>
                   <img
                     src={imagePreview}
                     alt="Preview"
-                    className="max-h-40 rounded-xl object-cover border border-border"
+                    className="max-h-40 w-full object-cover"
                   />
                 </div>
               )}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <input
                 type="checkbox"
                 id="featured"
                 checked={form.featured}
                 onChange={(e) => setForm((f) => ({ ...f, featured: e.target.checked }))}
-                className="w-4 h-4 rounded border-border bg-bg-dark text-accent focus:ring-accent"
+                className="w-4 h-4 rounded border-white/30 bg-black/50 text-[#e10600] focus:ring-[#00d4ff] focus:ring-offset-0 focus:ring-2"
               />
-              <label htmlFor="featured" className="text-sm text-text-muted">
+              <label htmlFor="featured" className="text-sm text-white/70">
                 Show as featured on homepage
               </label>
             </div>
@@ -244,7 +261,7 @@ export default function AdminPage() {
               <button
                 type="submit"
                 disabled={saving}
-                className="px-6 py-3 rounded-xl bg-accent text-bg-dark font-semibold hover:bg-accent-dim disabled:opacity-50 disabled:cursor-not-allowed"
+                className="f1-dashboard-btn-primary"
               >
                 {saving ? 'Saving...' : editingId ? 'Update article' : 'Publish article'}
               </button>
@@ -252,7 +269,7 @@ export default function AdminPage() {
                 <button
                   type="button"
                   onClick={clearForm}
-                  className="px-6 py-3 rounded-xl border border-border text-text-muted hover:text-text hover:border-text-muted"
+                  className="f1-dashboard-btn-ghost"
                 >
                   Cancel
                 </button>
@@ -262,21 +279,23 @@ export default function AdminPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-white mb-4">Your articles</h2>
+          <h2 className="text-lg font-bold text-white mb-4 tracking-wide flex items-center gap-2">
+            <span style={{ color: '#00d4ff' }}>Your articles</span>
+          </h2>
           {loading ? (
-            <p className="text-text-muted">Loading...</p>
+            <p className="text-white/50">Loading...</p>
           ) : articles.length === 0 ? (
-            <p className="text-text-muted">No articles yet. Add one above.</p>
+            <p className="text-white/50">No articles yet. Add one above.</p>
           ) : (
             <ul className="space-y-3">
               {articles.map((a) => (
                 <li
                   key={a._id}
-                  className="flex flex-wrap items-center justify-between gap-4 bg-bg-card rounded-xl p-4 border border-border"
+                  className="f1-dashboard-article-card flex flex-wrap items-center justify-between gap-4"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="font-medium text-white truncate">{a.title}</p>
-                    <p className="text-sm text-text-muted">
+                    <p className="font-semibold text-white truncate">{a.title}</p>
+                    <p className="text-sm text-white/50">
                       {a.category} · {a.createdAt ? new Date(a.createdAt).toLocaleDateString() : ''}
                     </p>
                   </div>
@@ -284,14 +303,14 @@ export default function AdminPage() {
                     <button
                       type="button"
                       onClick={() => startEdit(a)}
-                      className="px-4 py-2 rounded-lg bg-accent/20 text-accent font-medium hover:bg-accent/30"
+                      className="f1-dashboard-btn-secondary"
                     >
                       Edit
                     </button>
                     <button
                       type="button"
                       onClick={() => handleDelete(a._id)}
-                      className="px-4 py-2 rounded-lg border border-border text-text-muted hover:text-red-400 hover:border-red-400/50"
+                      className="f1-dashboard-btn-ghost"
                     >
                       Delete
                     </button>
