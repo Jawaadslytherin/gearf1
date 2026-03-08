@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { timeAgo } from '../lib/utils';
+import { timeAgo, categoryChipClasses, teamColorStripStyle } from '../lib/utils';
 
 export default function FeaturedArticle({ article, loading }) {
   if (loading) {
@@ -31,7 +31,12 @@ export default function FeaturedArticle({ article, loading }) {
 
   return (
     <Link to={`/article/${article.slug}`} className="block no-underline hover:no-underline">
-      <article className="relative rounded-2xl overflow-hidden bg-bg-card min-h-[300px] hover:ring-2 hover:ring-accent/50 transition-shadow">
+      <article className="relative rounded-2xl overflow-hidden bg-bg-card min-h-[300px] hover:ring-2 hover:ring-accent/50 transition-shadow f1-card-hover">
+        <div
+          className="absolute inset-x-0 top-0 h-1.5"
+          style={teamColorStripStyle(article.team)}
+          aria-hidden
+        />
         {article.imageUrl ? (
           <img
             src={article.imageUrl}
@@ -42,7 +47,7 @@ export default function FeaturedArticle({ article, loading }) {
           <div className="absolute inset-0 bg-gradient-to-br from-[#1e1e1e] to-[#141414]" />
         )}
         <div className="relative h-full min-h-[300px] flex flex-col justify-end p-8 bg-gradient-to-t from-black/90 to-transparent">
-          <span className="inline-flex self-start text-accent text-[0.7rem] font-semibold uppercase tracking-wider px-2.5 py-1.5 rounded-md border border-accent/40 bg-accent/10">
+          <span className={categoryChipClasses(article.category)}>
             {article.category}
           </span>
           <h2 className="mt-3 mb-1 text-xl font-semibold leading-snug max-w-[28ch] text-white">

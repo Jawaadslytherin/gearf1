@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getArticles, createArticle, updateArticle, deleteArticle, uploadImage } from '../lib/api';
 
-const CATEGORIES = ['Football', 'Cricket', 'Rugby', 'Tennis', 'Golf', 'Cycling', 'Others'];
+const CATEGORIES = ['Race Report', 'Qualifying', 'Practice', 'Analysis', 'Tech', 'Drivers', 'Teams', 'News'];
 
 export default function AdminPage() {
   const { logout } = useAuth();
@@ -16,7 +16,7 @@ export default function AdminPage() {
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState({
     title: '',
-    category: 'Football',
+    category: 'Race Report',
     excerpt: '',
     body: '',
     imageUrl: '',
@@ -44,7 +44,7 @@ export default function AdminPage() {
   function clearForm() {
     setForm({
       title: '',
-      category: 'Football',
+      category: 'Race Report',
       excerpt: '',
       body: '',
       imageUrl: '',

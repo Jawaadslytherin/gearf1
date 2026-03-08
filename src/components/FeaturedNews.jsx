@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { timeAgo } from '../lib/utils';
+import { timeAgo, categoryChipClasses, teamColorStripStyle } from '../lib/utils';
 
-const FILTERS = ['All', 'Football', 'Cricket', 'Rugby', 'Tennis', 'Golf', 'Cycling', 'Others'];
+const FILTERS = ['All', 'Race Report', 'Qualifying', 'Practice', 'Analysis', 'Tech', 'Drivers', 'Teams', 'News'];
 
 export default function FeaturedNews({ articles = [], loading }) {
   const [activeFilter, setActiveFilter] = useState('All');
@@ -42,7 +42,7 @@ export default function FeaturedNews({ articles = [], loading }) {
     <section className="mb-8">
       <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
         <h2 className="text-[0.75rem] font-semibold uppercase tracking-widest text-text-muted">
-          Featured News
+          Featured F1 Stories
         </h2>
         <div className="flex gap-1.5 flex-wrap">
           {FILTERS.map((f) => (
@@ -67,7 +67,12 @@ export default function FeaturedNews({ articles = [], loading }) {
         ) : (
           list.map((article) => (
             <Link key={article._id} to={`/article/${article.slug}`} className="block no-underline hover:no-underline">
-              <article className="bg-bg-card rounded-2xl overflow-hidden hover:ring-2 hover:ring-accent/30 transition-shadow">
+              <article className="relative bg-bg-card rounded-2xl overflow-hidden hover:ring-2 hover:ring-accent/30 transition-shadow f1-card-hover">
+                <div
+                  className="absolute inset-x-0 top-0 h-1"
+                  style={teamColorStripStyle(article.team)}
+                  aria-hidden
+                />
                 {article.imageUrl ? (
                   <img
                     src={article.imageUrl}
@@ -77,7 +82,7 @@ export default function FeaturedNews({ articles = [], loading }) {
                 ) : (
                   <div className="h-28 bg-gradient-to-br from-[#1e1e1e] to-[#141414]" />
                 )}
-                <span className="inline-block mt-3 mx-5 text-accent text-[0.7rem] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-md border border-accent/40 bg-accent/10">
+                <span className={`${categoryChipClasses(article.category)} mt-3 mx-5`}>
                   {article.category}
                 </span>
                 <h3 className="mt-1.5 mx-5 mb-5 text-[0.95rem] font-medium leading-snug text-text hover:text-accent">

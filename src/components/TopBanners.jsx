@@ -1,3 +1,5 @@
+import { FaTwitter, FaYoutube, FaInstagram } from 'react-icons/fa6';
+
 export default function TopBanners() {
   return (
     <section className="top-banners">
@@ -5,25 +7,31 @@ export default function TopBanners() {
         <div className="top-banner__image" />
         <div className="top-banner__content">
           <h2 className="top-banner__title">
-            &lsquo;No stone is left unturned in the Wallabies&rsquo; pursuit of World Cup glory&rsquo;
+            &lsquo;No stone left unturned in the chase for F1 championship glory&rsquo;
           </h2>
           <p className="top-banner__excerpt">
-            Wallabies have coach Eddie Jones and his leaders working hard to push for Rugby World Cup glory.
+            Inside the factory as engineers and drivers work through the night to find those crucial tenths of a second.
           </p>
           <div className="top-banner__social">
-            <a href="#twitter" aria-label="Twitter">𝕏</a>
-            <a href="#youtube" aria-label="YouTube">▶</a>
-            <a href="#instagram" aria-label="Instagram">📷</a>
+            <a href="#twitter" aria-label="Twitter">
+              <FaTwitter aria-hidden />
+            </a>
+            <a href="#youtube" aria-label="YouTube">
+              <FaYoutube aria-hidden />
+            </a>
+            <a href="#instagram" aria-label="Instagram">
+              <FaInstagram aria-hidden />
+            </a>
           </div>
         </div>
       </article>
       <div className="top-banner top-banner--right">
         <div className="top-banner__small-image" />
         <div className="top-banner__score">
-          <span>Federer 01</span>
-          <span>Nadal 03</span>
+          <span>VER 01</span>
+          <span>HAM 02</span>
         </div>
-        <p className="top-banner__snippet">Football transfer rumours</p>
+        <p className="top-banner__snippet">Paddock rumours and transfer talk</p>
       </div>
     </section>
   );

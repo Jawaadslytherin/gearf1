@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { timeAgo } from '../lib/utils';
+import { timeAgo, categoryChipClasses, teamColorStripStyle } from '../lib/utils';
 
 export default function TodaysSpotlight({ articles = [], loading }) {
   const list = articles.slice(0, 3);
@@ -43,8 +43,13 @@ export default function TodaysSpotlight({ articles = [], loading }) {
         {list.map((item) => (
           <li
             key={item._id}
-            className="grid grid-cols-[56px_1fr] gap-4 py-4 border-b border-border last:border-0 first:pt-0"
+            className="relative grid grid-cols-[56px_1fr] gap-4 py-4 border-b border-border last:border-0 first:pt-0 f1-card-hover"
           >
+            <div
+              className="absolute inset-x-0 top-0 h-1"
+              style={teamColorStripStyle(item.team)}
+              aria-hidden
+            />
             <Link to={`/article/${item.slug}`} className="contents no-underline hover:no-underline">
               {item.imageUrl ? (
                 <img
@@ -56,10 +61,8 @@ export default function TodaysSpotlight({ articles = [], loading }) {
                 <div className="w-14 h-14 rounded-xl bg-border shrink-0" />
               )}
               <div>
-                <div className="flex gap-2 text-[0.78rem] text-text-muted mb-1">
-                  <span className="text-accent font-semibold uppercase tracking-wider px-2.5 py-1 rounded-md border border-accent/30 bg-accent/10">
-                    {item.category}
-                  </span>
+                <div className="flex gap-2 items-center text-[0.78rem] text-text-muted mb-1">
+                  <span className={categoryChipClasses(item.category)}>{item.category}</span>
                   <span>{timeAgo(item.createdAt)}</span>
                 </div>
                 <h3 className="text-sm font-medium leading-snug text-text hover:text-accent">{item.title}</h3>

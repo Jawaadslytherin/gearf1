@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { timeAgo } from '../lib/utils';
+import { timeAgo, categoryChipClasses, teamColorStripStyle } from '../lib/utils';
 
 export default function TrendyNews({ articles = [], loading }) {
   const list = articles.slice(1, 4);
@@ -27,7 +27,7 @@ export default function TrendyNews({ articles = [], loading }) {
     return (
       <section className="mb-10">
         <h2 className="text-[0.75rem] font-semibold uppercase tracking-widest text-text-muted mb-5">
-          Trendy News
+          Trending F1 Stories
         </h2>
         <p className="text-text-muted text-sm">No articles yet.</p>
       </section>
@@ -37,12 +37,17 @@ export default function TrendyNews({ articles = [], loading }) {
   return (
     <section className="mb-10">
       <h2 className="text-[0.75rem] font-semibold uppercase tracking-widest text-text-muted mb-5">
-        Trendy News
+        Trending F1 Stories
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
         {list.map((item) => (
           <Link key={item._id} to={`/article/${item.slug}`} className="block no-underline hover:no-underline">
-            <article className="bg-bg-card rounded-2xl overflow-hidden hover:ring-2 hover:ring-accent/30 transition-shadow">
+            <article className="relative bg-bg-card rounded-2xl overflow-hidden hover:ring-2 hover:ring-accent/30 transition-shadow f1-card-hover">
+              <div
+                className="absolute inset-x-0 top-0 h-1"
+                style={teamColorStripStyle(item.team)}
+                aria-hidden
+              />
               {item.imageUrl ? (
                 <img
                   src={item.imageUrl}
@@ -53,7 +58,7 @@ export default function TrendyNews({ articles = [], loading }) {
                 <div className="h-36 bg-gradient-to-br from-[#1e1e1e] to-[#141414]" />
               )}
               <div className="flex items-center justify-between gap-2 pt-3 px-5 text-[0.78rem] text-text-muted">
-                <span className="text-accent font-semibold uppercase tracking-wider px-2.5 py-1 rounded-md border border-accent/30 bg-accent/10">
+                <span className={categoryChipClasses(item.category)}>
                   {item.category}
                 </span>
                 <span>{timeAgo(item.createdAt)}</span>

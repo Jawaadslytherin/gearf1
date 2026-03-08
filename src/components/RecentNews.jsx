@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { timeAgo } from '../lib/utils';
+import { timeAgo, categoryChipClasses, teamColorStripStyle } from '../lib/utils';
 
 export default function RecentNews({ articles = [], loading }) {
   const [activeTab, setActiveTab] = useState('recent');
@@ -61,10 +61,15 @@ export default function RecentNews({ articles = [], loading }) {
           list.map((item, i) => (
             <li
               key={item._id}
-              className={`grid grid-cols-[52px_1fr] gap-4 py-4 border-b border-border last:border-0 first:pt-0 ${
+              className={`relative grid grid-cols-[52px_1fr] gap-4 py-4 border-b border-border last:border-0 first:pt-0 f1-card-hover ${
                 i === 1 ? 'bg-accent/10 -mx-3 px-3 py-4 rounded-xl border-0 my-1' : ''
               }`}
             >
+              <div
+                className="absolute inset-x-0 top-0 h-1"
+                style={teamColorStripStyle(item.team)}
+                aria-hidden
+              />
               <Link to={`/article/${item.slug}`} className="contents no-underline hover:no-underline">
                 {item.imageUrl ? (
                   <img
@@ -76,8 +81,8 @@ export default function RecentNews({ articles = [], loading }) {
                   <div className="w-[52px] h-[52px] rounded-xl bg-border shrink-0" />
                 )}
                 <div>
-                  <div className="flex gap-2 text-[0.78rem] text-text-muted">
-                    <span className="text-accent font-semibold">{item.category}</span>
+                  <div className="flex gap-2 items-center text-[0.78rem] text-text-muted">
+                    <span className={categoryChipClasses(item.category)}>{item.category}</span>
                     <span>{timeAgo(item.createdAt)}</span>
                   </div>
                   <h3 className="mt-1.5 text-sm font-medium leading-snug text-text hover:text-accent">{item.title}</h3>

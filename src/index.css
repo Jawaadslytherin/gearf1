@@ -1,27 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap');
+
 @import "tailwindcss";
 
 @theme {
-  --color-bg-dark: #0d0d0d;
-  --color-bg-card: #161616;
-  --color-border: #2a2a2a;
-  --color-text: #e8e8e8;
-  --color-text-muted: #9a9a9a;
-  --color-accent: #f5c518;
-  --color-accent-dim: #c9a014;
+  /* Speed-script-hub design tokens */
+  --color-background: hsl(0 0% 5%);
+  --color-foreground: hsl(0 0% 95%);
+  --color-card: hsl(0 0% 8%);
+  --color-card-foreground: hsl(0 0% 95%);
+  --color-primary: hsl(0 85% 50%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(0 0% 12%);
+  --color-secondary-foreground: hsl(0 0% 85%);
+  --color-muted: hsl(0 0% 15%);
+  --color-muted-foreground: hsl(0 0% 55%);
+  --color-border: hsl(0 0% 18%);
+  --color-input: hsl(0 0% 15%);
+  --color-ring: hsl(0 85% 50%);
+  --color-destructive: hsl(0 84% 60%);
+  --color-accent: hsl(0 85% 50%);
+  --color-accent-foreground: hsl(0 0% 100%);
   --color-live: #e53935;
   --color-f1-blue: #00d4ff;
   --color-f1-red: #e10600;
+  --font-display: 'Orbitron', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --radius-lg: 0.5rem;
+  --radius-md: calc(0.5rem - 2px);
+  --radius-sm: calc(0.5rem - 4px);
 }
 
 body {
-  @apply bg-bg-dark text-text antialiased min-h-screen;
+  @apply bg-background text-foreground antialiased min-h-screen;
+  font-family: var(--font-body);
 }
 
 a {
-  @apply text-accent no-underline;
+  @apply text-primary no-underline;
 }
 a:hover {
-  @apply text-accent-dim underline;
+  @apply text-primary/90;
 }
 
 /* F1 admin login UI (custom frame + neon/glass look) */
@@ -315,4 +333,46 @@ a:hover {
 .f1-dashboard-article-card:hover {
   border-color: rgba(105, 235, 255, 0.35);
   box-shadow: 0 0 20px rgba(0, 212, 255, 0.08);
+}
+
+/* Shared F1 card hover motion */
+.f1-card-hover {
+  transform-origin: center center;
+  transition:
+    transform 180ms ease-out,
+    box-shadow 180ms ease-out;
+  will-change: transform, box-shadow;
+}
+
+.f1-card-hover::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: 0;
+  height: 3px;
+  border-radius: 999px;
+  background: radial-gradient(circle at center, var(--color-f1-red), transparent 65%);
+  opacity: 0;
+  transform: scaleX(0.8);
+  transition:
+    opacity 180ms ease-out,
+    transform 180ms ease-out;
+}
+
+.f1-card-hover:hover {
+  transform: translateY(-4px) scale(1.01) rotateX(1deg);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.6),
+    0 0 26px rgba(0, 212, 255, 0.24);
+}
+
+.f1-card-hover:hover::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* Telemetry smooth bar animation */
+.f1-telemetry-bar-inner {
+  transition: width 360ms ease-out;
 }

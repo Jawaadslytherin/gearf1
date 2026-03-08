@@ -99,3 +99,12 @@ export async function getFootballMatches(params = {}) {
   if (!res.ok) return { matches: [] };
   return res.json();
 }
+
+// OpenF1 car data proxy
+// Params: driver_number (required), meeting_key, session_key, limit, speed_gte
+export async function getCarData(params = {}) {
+  const q = new URLSearchParams(params).toString();
+  const res = await fetch(`${API_BASE}/api/f1/car-data${q ? '?' + q : ''}`);
+  if (!res.ok) return { samples: [] };
+  return res.json();
+}
