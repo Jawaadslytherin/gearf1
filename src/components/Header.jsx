@@ -44,28 +44,6 @@ export default function Header() {
           >
             Subscribe
           </Button>
-          <div className="h-4 w-px bg-border" />
-          {isAuthenticated ? (
-            <Link to="/admin">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="font-display text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground"
-              >
-                Admin
-              </Button>
-            </Link>
-          ) : (
-            <Link to="/admin/login">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                <Lock className="h-4 w-4" />
-              </Button>
-            </Link>
-          )}
         </div>
       </div>
       {/* Racing stripe */}
