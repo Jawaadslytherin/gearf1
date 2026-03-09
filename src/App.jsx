@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import AdminPage from './pages/AdminPage';
 import ArticlePage from './pages/ArticlePage';
 import LoginPage from './pages/LoginPage';
+import DriversPage from './pages/DriversPage';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/article/:slug" element={<ArticlePage />} />
+        <Route path="/drivers" element={<DriversPage />} />
         <Route path="/admin/login" element={<LoginPage />} />
         <Route
           path="/admin"

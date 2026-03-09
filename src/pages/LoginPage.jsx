@@ -86,9 +86,9 @@ export default function LoginPage() {
           {/* Logo & Brand */}
           <div className="mb-10 flex flex-col items-center">
             <img
-              src="/Blue Transparent.png"
+              src="/logo.svg"
               alt="GearUp logo"
-              className="h-14 w-14 mb-4 invert opacity-90 object-contain"
+              className="h-16 w-16 mb-4 opacity-90 object-contain"
             />
             <h1 className="font-display text-3xl font-bold tracking-wider text-foreground">
               GEAR<span className="text-primary">UP</span>

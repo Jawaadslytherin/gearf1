@@ -5,16 +5,21 @@ import { useAuth } from '../context/AuthContext';
 
 export default function Header() {
   const { isAuthenticated } = useAuth();
-  const navItems = ['News', 'Teams', 'Drivers', 'Calendar'];
+  const navItems = [
+    { label: 'News', to: '/' },
+    { label: 'Teams', to: '/' },
+    { label: 'Drivers', to: '/drivers' },
+    { label: 'Calendar', to: '/' },
+  ];
 
   return (
     <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <Link to="/" className="flex items-center gap-3 no-underline">
           <img
-            src="/Blue Transparent.png"
+            src="/logo.svg"
             alt="GearUp"
-            className="h-8 w-8 invert opacity-90 object-contain"
+            className="h-10 w-10 opacity-90 object-contain"
           />
           <span className="font-display text-xl font-bold tracking-wider text-foreground">
             GEAR<span className="text-primary">UP</span>
@@ -22,13 +27,13 @@ export default function Header() {
         </Link>
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
-            <button
-              key={item}
-              type="button"
-              className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors"
+            <Link
+              key={item.label}
+              to={item.to}
+              className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors no-underline"
             >
-              {item}
-            </button>
+              {item.label}
+            </Link>
           ))}
         </div>
         <div className="flex items-center gap-3">

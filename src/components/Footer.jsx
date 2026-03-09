@@ -7,9 +7,9 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <Link to="/" className="flex items-center gap-3 no-underline">
             <img
-              src="/Blue Transparent.png"
+              src="/logo.svg"
               alt="GearUp"
-              className="h-6 w-6 invert opacity-70 object-contain"
+              className="h-8 w-8 opacity-70 object-contain"
             />
             <span className="font-display text-sm font-bold tracking-wider text-muted-foreground">
               GEAR<span className="text-primary">UP</span>
