@@ -6,6 +6,7 @@ import AdminPage from './pages/AdminPage';
 import ArticlePage from './pages/ArticlePage';
 import LoginPage from './pages/LoginPage';
 import DriversPage from './pages/DriversPage';
+import CalendarPage from './pages/CalendarPage';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/article/:slug" element={<ArticlePage />} />
+        <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/drivers" element={<DriversPage />} />
         <Route path="/admin/login" element={<LoginPage />} />
         <Route

@@ -9,7 +9,7 @@ export default function Header() {
     { label: 'News', to: '/' },
     { label: 'Teams', to: '/' },
     { label: 'Drivers', to: '/drivers' },
-    { label: 'Calendar', to: '/' },
+    { label: 'Calendar', to: '/calendar' },
   ];
 
   return (
