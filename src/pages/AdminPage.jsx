@@ -20,6 +20,8 @@ export default function AdminPage() {
     excerpt: '',
     body: '',
     imageUrl: '',
+    photoCredit: '',
+    articleCredit: '',
     featured: false,
   });
   const [imageFile, setImageFile] = useState(null);
@@ -48,6 +50,8 @@ export default function AdminPage() {
       excerpt: '',
       body: '',
       imageUrl: '',
+      photoCredit: '',
+      articleCredit: '',
       featured: false,
     });
     setImageFile(null);
@@ -115,6 +119,8 @@ export default function AdminPage() {
       excerpt: article.excerpt || '',
       body: article.body || '',
       imageUrl: article.imageUrl || '',
+      photoCredit: article.photoCredit || '',
+      articleCredit: article.articleCredit || '',
       featured: !!article.featured,
     });
     setImageFile(null);
@@ -242,6 +248,32 @@ export default function AdminPage() {
                   />
                 </div>
               )}
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-white/70 uppercase tracking-wider mb-2">
+                Photograph credit
+              </label>
+              <input
+                type="text"
+                value={form.photoCredit}
+                onChange={(e) => setForm((f) => ({ ...f, photoCredit: e.target.value }))}
+                placeholder="e.g. Photo: Getty Images / Mark Thompson"
+                className="f1-dashboard-input"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-white/70 uppercase tracking-wider mb-2">
+                Article credit
+              </label>
+              <input
+                type="text"
+                value={form.articleCredit}
+                onChange={(e) => setForm((f) => ({ ...f, articleCredit: e.target.value }))}
+                placeholder="e.g. By Mohd A."
+                className="f1-dashboard-input"
+              />
             </div>
 
             <div className="flex items-center gap-3">

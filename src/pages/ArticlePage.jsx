@@ -60,11 +60,18 @@ export default function ArticlePage() {
 
         <article className="rounded-lg border border-border bg-card/60 overflow-hidden backdrop-blur-sm">
           {article.imageUrl && (
-            <img
-              src={article.imageUrl}
-              alt=""
-              className="w-full aspect-video object-cover"
-            />
+            <div className="relative">
+              <img
+                src={article.imageUrl}
+                alt=""
+                className="w-full aspect-video object-cover"
+              />
+              {article.photoCredit && (
+                <span className="absolute bottom-3 right-3 rounded bg-black/60 px-2 py-1 text-[10px] font-body text-white/90">
+                  {article.photoCredit}
+                </span>
+              )}
+            </div>
           )}
           <div className="p-6 sm:p-8">
             <span className="inline-block text-primary text-[0.7rem] font-display font-semibold uppercase tracking-[0.2em] px-3 py-1 rounded-sm border border-primary/40 bg-primary/10 mb-3">
@@ -73,6 +80,11 @@ export default function ArticlePage() {
             <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground leading-tight mb-2">
               {article.title}
             </h1>
+            {article.articleCredit && (
+              <p className="font-body text-sm text-muted-foreground mb-2">
+                {article.articleCredit}
+              </p>
+            )}
             <p className="font-body text-sm text-muted-foreground mb-6">
               {timeAgo(article.createdAt)}
               {article.updatedAt && article.updatedAt !== article.createdAt && (

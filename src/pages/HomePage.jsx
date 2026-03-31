@@ -41,6 +41,11 @@ export default function HomePage() {
             ) : (
               <div className="h-full w-full bg-gradient-to-br from-[#1e1e1e] to-[#141414]" />
             )}
+            {featured.imageUrl && featured.photoCredit && (
+              <span className="absolute bottom-3 right-3 z-20 rounded bg-black/60 px-2 py-1 text-[10px] font-body text-white/90">
+                {featured.photoCredit}
+              </span>
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
             <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-transparent" />
           </div>
@@ -58,6 +63,11 @@ export default function HomePage() {
               <h1 className="font-display text-3xl md:text-5xl font-bold leading-tight text-foreground">
                 {featured.title}
               </h1>
+              {featured.articleCredit && (
+                <p className="font-body text-xs text-muted-foreground">
+                  {featured.articleCredit}
+                </p>
+              )}
               <p className="font-body text-base text-muted-foreground leading-relaxed max-w-lg line-clamp-2">
                 {featured.excerpt || 'Read the full story.'}
               </p>
@@ -160,6 +170,11 @@ export default function HomePage() {
                         <h3 className="font-display text-sm font-semibold leading-snug text-foreground group-hover:text-primary transition-colors line-clamp-2">
                           {article.title}
                         </h3>
+                        {article.articleCredit && (
+                          <p className="font-body text-[11px] text-muted-foreground line-clamp-1">
+                            {article.articleCredit}
+                          </p>
+                        )}
 
                         <p className="font-body text-xs text-muted-foreground leading-relaxed line-clamp-3">
                           {article.excerpt || 'Read the full story.'}
