@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Seo from '../components/Seo';
+import ArticleJsonLd from '../components/ArticleJsonLd';
 import { getArticleBySlug } from '../lib/api';
 import { articleMetaDescription } from '../lib/seo';
 import { timeAgo } from '../lib/utils';
@@ -77,11 +78,16 @@ export default function ArticlePage() {
             : undefined
         }
       />
+      <ArticleJsonLd article={article} slug={slug} />
       <Header />
       <main className="max-w-3xl mx-auto px-6 py-8 pb-12">
-        <Link to="/" className="inline-block text-primary hover:text-primary/90 text-sm font-medium mb-6 no-underline">
-          ← Back to home
-        </Link>
+        <nav className="font-body text-sm text-muted-foreground mb-6 flex flex-wrap gap-x-2 gap-y-1">
+          <Link to="/" className="text-primary hover:text-primary/90 no-underline">Home</Link>
+          <span aria-hidden="true">/</span>
+          <Link to="/blog" className="text-primary hover:text-primary/90 no-underline">Blog</Link>
+          <span aria-hidden="true">/</span>
+          <span className="text-foreground truncate max-w-[12rem] sm:max-w-none">{article.title}</span>
+        </nav>
 
         <article className="rounded-lg border border-border bg-card/60 overflow-hidden backdrop-blur-sm">
           {article.imageUrl && (
@@ -124,6 +130,12 @@ export default function ArticlePage() {
             <div className="font-body text-foreground leading-relaxed whitespace-pre-wrap">
               {article.body || <p className="text-muted-foreground">No content yet.</p>}
             </div>
+            <nav className="mt-10 pt-8 border-t border-border font-body text-sm text-muted-foreground flex flex-wrap gap-x-4 gap-y-2">
+              <Link to="/blog" className="text-primary no-underline hover:text-primary/90">More articles</Link>
+              <Link to="/calendar" className="text-primary no-underline hover:text-primary/90">Calendar</Link>
+              <Link to="/drivers" className="text-primary no-underline hover:text-primary/90">Drivers</Link>
+              <Link to="/contact" className="text-primary no-underline hover:text-primary/90">Contact</Link>
+            </nav>
           </div>
         </article>
       </main>

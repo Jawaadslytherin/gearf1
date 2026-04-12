@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Seo from '../components/Seo';
@@ -293,6 +294,12 @@ export default function CalendarPage() {
           })}
         </div>
       </section>
+
+      <nav className="mx-auto max-w-7xl px-6 pb-10 font-body text-sm text-muted-foreground flex flex-wrap gap-x-5 gap-y-2">
+        <Link to="/blog" className="text-primary no-underline hover:text-primary/90">All articles</Link>
+        <Link to="/drivers" className="text-primary no-underline hover:text-primary/90">Driver grid</Link>
+        <Link to="/about" className="text-primary no-underline hover:text-primary/90">About</Link>
+      </nav>
 
       <Footer />
     </div>

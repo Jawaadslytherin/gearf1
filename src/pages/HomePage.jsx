@@ -107,7 +107,10 @@ export default function HomePage() {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-10">
           <div>
             {/* Section heading */}
-            <div className="mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <div
+              id="latest-stories"
+              className="mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6 scroll-mt-24"
+            >
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="h-1 w-8 rounded-full bg-primary" />
@@ -116,6 +119,23 @@ export default function HomePage() {
                   </span>
                 </div>
                 <h2 className="font-display text-2xl font-bold text-foreground">From the Paddock</h2>
+                <p className="font-body text-xs text-muted-foreground max-w-md">
+                  <Link to="/blog" className="text-primary hover:text-primary/90 no-underline font-medium">
+                    View all articles
+                  </Link>
+                  {' · '}
+                  <Link to="/calendar" className="text-primary hover:text-primary/90 no-underline font-medium">
+                    Race calendar
+                  </Link>
+                  {' · '}
+                  <Link to="/drivers" className="text-primary hover:text-primary/90 no-underline font-medium">
+                    Driver grid
+                  </Link>
+                  {' · '}
+                  <Link to="/about" className="text-primary hover:text-primary/90 no-underline font-medium">
+                    About
+                  </Link>
+                </p>
               </div>
 
               {/* Category filter */}

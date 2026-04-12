@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Trophy, ChevronRight } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -255,6 +256,12 @@ export default function DriversPage() {
           ))}
         </div>
       </main>
+
+      <nav className="mx-auto max-w-7xl px-6 pb-10 font-body text-sm text-muted-foreground flex flex-wrap gap-x-5 gap-y-2">
+        <Link to="/blog" className="text-primary no-underline hover:text-primary/90">All articles</Link>
+        <Link to="/calendar" className="text-primary no-underline hover:text-primary/90">Race calendar</Link>
+        <Link to="/contact" className="text-primary no-underline hover:text-primary/90">Contact</Link>
+      </nav>
 
       <Footer />
     </div>

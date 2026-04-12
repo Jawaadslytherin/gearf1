@@ -1,15 +1,13 @@
 import { Link } from 'react-router-dom';
-import { Lock } from 'lucide-react';
 import { Button } from './ui/Button';
-import { useAuth } from '../context/AuthContext';
 
 export default function Header() {
-  const { isAuthenticated } = useAuth();
   const navItems = [
-    { label: 'News', to: '/' },
-    { label: 'Teams', to: '/' },
+    { label: 'Home', to: '/' },
+    { label: 'Blog', to: '/blog' },
     { label: 'Drivers', to: '/drivers' },
     { label: 'Calendar', to: '/calendar' },
+    { label: 'About', to: '/about' },
   ];
 
   return (

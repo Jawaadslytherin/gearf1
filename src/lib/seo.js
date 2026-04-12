@@ -4,7 +4,7 @@ export const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://gearupf1.com'
 export const SITE_NAME = 'GearUp F1';
 
 export const DEFAULT_DESCRIPTION =
-  'GearUp F1 – live F1 telemetry, race reports, driver grid, and in-depth Formula 1 analysis.';
+  'Get latest Formula 1 news, race analysis, and driver insights on GearUp F1.';
 
 export function absoluteUrl(path) {
   if (!path) return SITE_URL;
@@ -37,4 +37,47 @@ export function articleMetaDescription(article) {
     .replace(/\s+/g, ' ')
     .trim();
   return truncateMeta(plain);
+}
+
+/** JSON-LD NewsArticle for article pages (Google rich results). */
+export function articleJsonLd(article, slug) {
+  const pageUrl = absoluteUrl(`/article/${encodeURIComponent(slug)}`);
+  const desc = articleMetaDescription(article);
+  const published = article.createdAt ? new Date(article.createdAt).toISOString() : undefined;
+  const modified = article.updatedAt
+    ? new Date(article.updatedAt).toISOString()
+    : published;
+
+  const author =
+    article.articleCredit && String(article.articleCredit).trim()
+      ? { '@type': 'Person', name: String(article.articleCredit).trim() }
+      : { '@type': 'Organization', name: SITE_NAME };
+
+  const images = [];
+  if (article.imageUrl) {
+    images.push(ogImageUrl(article.imageUrl));
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    headline: article.title,
+    description: desc,
+    image: images.length ? images : undefined,
+    datePublished: published,
+    dateModified: modified,
+    author,
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      logo: {
+        '@type': 'ImageObject',
+        url: absoluteUrl('/logo.svg'),
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': pageUrl,
+    },
+  };
 }

@@ -16,6 +16,9 @@ node_modules
 dist
 dist-ssr
 
+# Generated before vite build (see scripts/build-sitemap.mjs)
+public/sitemap.xml
+
 *.local
 
 # Editor directories and files
