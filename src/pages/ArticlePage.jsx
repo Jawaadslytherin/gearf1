@@ -94,8 +94,12 @@ export default function ArticlePage() {
             <div className="relative">
               <img
                 src={article.imageUrl}
-                alt=""
+                alt={article.title ? `${article.title.slice(0, 120)}${article.title.length > 120 ? '…' : ''}` : ''}
                 className="w-full aspect-video object-cover"
+                width={1200}
+                height={675}
+                decoding="async"
+                fetchPriority="high"
               />
               {article.photoCredit && (
                 <span className="absolute bottom-3 right-3 rounded bg-black/60 px-2 py-1 text-[10px] font-body text-white/90">

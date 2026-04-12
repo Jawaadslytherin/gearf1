@@ -2,36 +2,16 @@
  * Writes public/sitemap.xml before Vite build: static routes + article URLs from API.
  * Env: VITE_SITE_URL, VITE_API_URL (or .env / .env.production).
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { writeFileSync, mkdirSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { loadEnvFiles } from './load-env.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
 const publicDir = join(root, 'public');
 
-function loadEnvFile(rel) {
-  try {
-    const text = readFileSync(join(root, rel), 'utf8');
-    for (const line of text.split('\n')) {
-      const t = line.trim();
-      if (!t || t.startsWith('#')) continue;
-      const eq = t.indexOf('=');
-      if (eq === -1) continue;
-      const key = t.slice(0, eq).trim();
-      let val = t.slice(eq + 1).trim();
-      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
-        val = val.slice(1, -1);
-      }
-      if (process.env[key] === undefined) process.env[key] = val;
-    }
-  } catch {
-    /* optional */
-  }
-}
-
-loadEnvFile('.env.production');
-loadEnvFile('.env');
+loadEnvFiles(root);
 
 const SITE_URL = (process.env.VITE_SITE_URL || 'https://gearupf1.com').replace(/\/$/, '');
 const API_BASE = (process.env.VITE_API_URL || 'http://127.0.0.1:3001').replace(/\/$/, '');

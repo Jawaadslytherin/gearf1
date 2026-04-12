@@ -237,6 +237,8 @@ export default function DriversPage() {
                     src={driver.image}
                     alt={`${driver.firstName} ${driver.lastName}`}
                     className="relative z-20 h-40 md:h-44 object-contain object-bottom drop-shadow-lg group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
 

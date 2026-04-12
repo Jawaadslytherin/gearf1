@@ -43,7 +43,13 @@ export default function HomePage() {
         <section className="relative overflow-hidden">
           <div className="absolute inset-0">
             {featured.imageUrl ? (
-              <img src={featured.imageUrl} alt="" className="h-full w-full object-cover" />
+              <img
+                src={featured.imageUrl}
+                alt=""
+                className="h-full w-full object-cover"
+                decoding="async"
+                fetchPriority="high"
+              />
             ) : (
               <div className="h-full w-full bg-gradient-to-br from-[#1e1e1e] to-[#141414]" />
             )}
