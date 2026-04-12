@@ -19,7 +19,7 @@ export default function AdminPage() {
     title: '',
     category: 'Race Report',
     excerpt: '',
-    body: '',
+    content: [],
     imageUrl: '',
     photoCredit: '',
     articleCredit: '',
@@ -37,7 +37,7 @@ export default function AdminPage() {
       setLoading(true);
       const { articles: list } = await getArticles();
       setArticles(list || []);
-    } catch (e) {
+    } catch {
       setError('Could not load articles. Is the backend running?');
     } finally {
       setLoading(false);
@@ -49,7 +49,7 @@ export default function AdminPage() {
       title: '',
       category: 'Race Report',
       excerpt: '',
-      body: '',
+      content: [],
       imageUrl: '',
       photoCredit: '',
       articleCredit: '',
@@ -58,6 +58,35 @@ export default function AdminPage() {
     setImageFile(null);
     setImagePreview('');
     setEditingId(null);
+  }
+
+  function addBlock(type) {
+    const block =
+      type === 'paragraph' ? { type: 'paragraph', text: '' }
+      : type === 'embed'   ? { type: 'embed', url: '' }
+      :                      { type: 'divider' };
+    setForm((f) => ({ ...f, content: [...f.content, block] }));
+  }
+
+  function updateBlock(index, patch) {
+    setForm((f) => ({
+      ...f,
+      content: f.content.map((b, i) => (i === index ? { ...b, ...patch } : b)),
+    }));
+  }
+
+  function removeBlock(index) {
+    setForm((f) => ({ ...f, content: f.content.filter((_, i) => i !== index) }));
+  }
+
+  function moveBlock(index, dir) {
+    setForm((f) => {
+      const next = [...f.content];
+      const target = index + dir;
+      if (target < 0 || target >= next.length) return f;
+      [next[index], next[target]] = [next[target], next[index]];
+      return { ...f, content: next };
+    });
   }
 
   function handleImageChange(e) {
@@ -114,11 +143,19 @@ export default function AdminPage() {
 
   function startEdit(article) {
     setEditingId(article._id);
+    // If the article has structured content blocks, use them.
+    // Otherwise convert legacy body string into a single paragraph block.
+    const content =
+      Array.isArray(article.content) && article.content.length > 0
+        ? article.content
+        : article.body
+        ? [{ type: 'paragraph', text: article.body }]
+        : [];
     setForm({
       title: article.title,
       category: article.category,
       excerpt: article.excerpt || '',
-      body: article.body || '',
+      content,
       imageUrl: article.imageUrl || '',
       photoCredit: article.photoCredit || '',
       articleCredit: article.articleCredit || '',
@@ -226,15 +263,92 @@ export default function AdminPage() {
 
             <div>
               <label className="block text-xs font-semibold text-white/70 uppercase tracking-wider mb-2">
-                Full article content
+                Article content
               </label>
-              <textarea
-                value={form.body}
-                onChange={(e) => setForm((f) => ({ ...f, body: e.target.value }))}
-                placeholder="Write your article here..."
-                rows={6}
-                className="f1-dashboard-input resize-y"
-              />
+              <div className="space-y-3">
+                {form.content.map((block, i) => (
+                  <div key={i} className="rounded-xl border border-white/10 bg-white/5 p-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <span
+                        className="text-xs font-semibold uppercase tracking-wider"
+                        style={{
+                          color: block.type === 'embed' ? '#00d4ff'
+                               : block.type === 'divider' ? '#737373'
+                               : '#a3a3a3',
+                        }}
+                      >
+                        {block.type === 'embed' ? 'Embed' : block.type === 'divider' ? 'Divider' : 'Paragraph'}
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => moveBlock(i, -1)}
+                          disabled={i === 0}
+                          className="text-white/40 hover:text-white/80 disabled:opacity-20 px-1 text-sm"
+                          title="Move up"
+                        >↑</button>
+                        <button
+                          type="button"
+                          onClick={() => moveBlock(i, 1)}
+                          disabled={i === form.content.length - 1}
+                          className="text-white/40 hover:text-white/80 disabled:opacity-20 px-1 text-sm"
+                          title="Move down"
+                        >↓</button>
+                        <button
+                          type="button"
+                          onClick={() => removeBlock(i)}
+                          className="text-red-400/70 hover:text-red-400 px-1 text-sm ml-1"
+                          title="Remove block"
+                        >×</button>
+                      </div>
+                    </div>
+                    {block.type === 'paragraph' ? (
+                      <textarea
+                        value={block.text}
+                        onChange={(e) => updateBlock(i, { text: e.target.value })}
+                        placeholder="Paragraph text..."
+                        rows={4}
+                        className="f1-dashboard-input resize-y"
+                      />
+                    ) : block.type === 'embed' ? (
+                      <input
+                        type="url"
+                        value={block.url}
+                        onChange={(e) => updateBlock(i, { url: e.target.value })}
+                        placeholder="https://twitter.com/.../status/123 or https://instagram.com/p/..."
+                        className="f1-dashboard-input"
+                      />
+                    ) : (
+                      <div className="border-t border-white/20 my-1" />
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-2 mt-3 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => addBlock('paragraph')}
+                  className="f1-dashboard-btn-ghost text-sm"
+                >
+                  + Paragraph
+                </button>
+                <button
+                  type="button"
+                  onClick={() => addBlock('divider')}
+                  className="f1-dashboard-btn-ghost text-sm"
+                  style={{ color: '#737373', borderColor: 'rgba(115,115,115,0.3)' }}
+                >
+                  + Divider
+                </button>
+                <button
+                  type="button"
+                  onClick={() => addBlock('embed')}
+                  className="f1-dashboard-btn-ghost text-sm"
+                  style={{ color: '#00d4ff', borderColor: 'rgba(0,212,255,0.3)' }}
+                >
+                  + Embed
+                </button>
+              </div>
             </div>
 
             <div>

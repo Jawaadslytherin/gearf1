@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Seo from '../components/Seo';
 import ArticleJsonLd from '../components/ArticleJsonLd';
+import SocialEmbed from '../components/SocialEmbed';
 import { getArticleBySlug } from '../lib/api';
 import { articleMetaDescription } from '../lib/seo';
 import { timeAgo } from '../lib/utils';
@@ -131,9 +132,36 @@ export default function ArticlePage() {
                 {article.excerpt}
               </p>
             )}
-            <div className="font-body text-foreground leading-relaxed whitespace-pre-wrap">
-              {article.body || <p className="text-muted-foreground">No content yet.</p>}
-            </div>
+            {Array.isArray(article.content) && article.content.length > 0 ? (
+              <div className="font-body text-foreground leading-relaxed space-y-4">
+                {article.content.map((block, index) => {
+                  if (block.type === 'paragraph') {
+                    return (
+                      <p key={index} className="whitespace-pre-wrap">
+                        {block.text}
+                      </p>
+                    );
+                  }
+                  if (block.type === 'divider') {
+                    return (
+                      <hr key={index} className="border-t border-border my-6" />
+                    );
+                  }
+                  if (block.type === 'embed') {
+                    return (
+                      <div key={index} className="my-4">
+                        <SocialEmbed url={block.url} />
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+            ) : (
+              <div className="font-body text-foreground leading-relaxed whitespace-pre-wrap">
+                {article.body || <p className="text-muted-foreground">No content yet.</p>}
+              </div>
+            )}
             <nav className="mt-10 pt-8 border-t border-border font-body text-sm text-muted-foreground flex flex-wrap gap-x-4 gap-y-2">
               <Link to="/blog" className="text-primary no-underline hover:text-primary/90">More articles</Link>
               <Link to="/calendar" className="text-primary no-underline hover:text-primary/90">Calendar</Link>

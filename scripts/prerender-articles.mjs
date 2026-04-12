@@ -61,6 +61,26 @@ function buildArticleHtml(article, slug, siteUrl, scriptTag, linkTag) {
     article.excerpt &&
     `<p style="font-size:1.05rem;color:#d4d4d4;line-height:1.6;border-left:4px solid #ef4444;padding-left:1rem;margin:0 0 1.5rem">${escapeHtml(article.excerpt)}</p>`;
 
+  // Render body content — structured blocks take priority over legacy body string
+  const bodyHtml =
+    Array.isArray(article.content) && article.content.length > 0
+      ? article.content
+          .map((block) => {
+            if (block.type === 'paragraph') {
+              return `<p style="white-space:pre-wrap;margin:0 0 1rem;font-size:1rem;color:#e5e5e5">${escapeHtml(block.text || '')}</p>`;
+            }
+            if (block.type === 'divider') {
+              return `<hr style="border:none;border-top:1px solid #27272a;margin:1.5rem 0" />`;
+            }
+            if (block.type === 'embed' && block.url) {
+              // Embeds are client-only; expose the URL as a link so crawlers see the reference
+              return `<p style="font-size:0.875rem;color:#737373;margin:0 0 1rem"><a href="${escapeAttr(block.url)}" rel="noopener noreferrer" style="color:#ef4444">${escapeHtml(block.url)}</a></p>`;
+            }
+            return '';
+          })
+          .join('')
+      : `<div style="white-space:pre-wrap;font-size:1rem;color:#e5e5e5">${escapeHtml(article.body || '')}</div>`;
+
   const inner = `
     <div style="max-width:48rem;margin:0 auto;padding:1.5rem 1.25rem 3rem;font-family:ui-sans-serif,system-ui,sans-serif;background:#0a0a0a;color:#fafafa;min-height:100vh;line-height:1.5">
       <nav style="font-size:14px;margin-bottom:1.5rem"><a href="/" style="color:#ef4444;text-decoration:none">Home</a> <span style="color:#737373">/</span> <a href="/blog" style="color:#ef4444;text-decoration:none">Blog</a></nav>
@@ -70,7 +90,7 @@ function buildArticleHtml(article, slug, siteUrl, scriptTag, linkTag) {
         ${creditBlock}
         ${imgBlock}
         ${excerptBlock}
-        <div style="white-space:pre-wrap;font-size:1rem;color:#e5e5e5">${escapeHtml(article.body || '')}</div>
+        ${bodyHtml}
       </article>
       <p style="margin-top:2rem;font-size:13px"><a href="/blog" style="color:#ef4444;text-decoration:none">More articles</a> · <a href="/calendar" style="color:#ef4444;text-decoration:none">Calendar</a> · <a href="/drivers" style="color:#ef4444;text-decoration:none">Drivers</a></p>
     </div>`.trim();
