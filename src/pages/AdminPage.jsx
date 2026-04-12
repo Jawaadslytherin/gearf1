@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getArticles, createArticle, updateArticle, deleteArticle, uploadImage } from '../lib/api';
+import Seo from '../components/Seo';
 
 const CATEGORIES = ['Race Report', 'Qualifying', 'Practice', 'Analysis', 'Tech', 'Drivers', 'Teams', 'News'];
 
@@ -130,6 +131,13 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen text-white f1-dashboard-bg">
+      <Seo
+        title="Articles admin"
+        path="/admin"
+        description="GearUp F1 CMS — not for public indexing."
+        image="/logo.svg"
+        noindex
+      />
       <header className="sticky top-0 z-10 border-b border-white/10 bg-black/60 backdrop-blur-md">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">

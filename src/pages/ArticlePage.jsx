@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Seo from '../components/Seo';
 import { getArticleBySlug } from '../lib/api';
+import { articleMetaDescription } from '../lib/seo';
 import { timeAgo } from '../lib/utils';
 
 export default function ArticlePage() {
@@ -22,6 +24,11 @@ export default function ArticlePage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
+        <Seo
+          title="Article"
+          path={slug ? `/article/${slug}` : '/'}
+          description="Loading article on GearUp F1."
+        />
         <Header />
         <main className="max-w-3xl mx-auto px-6 py-12">
           <div className="animate-pulse space-y-4">
@@ -40,6 +47,12 @@ export default function ArticlePage() {
   if (error || !article) {
     return (
       <div className="min-h-screen bg-background">
+        <Seo
+          title="Article not found"
+          path={slug ? `/article/${slug}` : '/'}
+          description="This article may have been removed or the link is incorrect."
+          noindex
+        />
         <Header />
         <main className="max-w-3xl mx-auto px-6 py-12 text-center">
           <p className="text-muted-foreground mb-6">{error || 'Article not found.'}</p>
@@ -52,6 +65,18 @@ export default function ArticlePage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title={article.title}
+        description={articleMetaDescription(article)}
+        path={`/article/${slug}`}
+        image={article.imageUrl}
+        type="article"
+        publishedTime={
+          article.createdAt
+            ? new Date(article.createdAt).toISOString()
+            : undefined
+        }
+      />
       <Header />
       <main className="max-w-3xl mx-auto px-6 py-8 pb-12">
         <Link to="/" className="inline-block text-primary hover:text-primary/90 text-sm font-medium mb-6 no-underline">

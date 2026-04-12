@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ChevronRight, Clock, Flame, Flag, ArrowRight } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Seo from '../components/Seo';
 import F1Telemetry from '../components/F1Telemetry';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
@@ -30,6 +31,11 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title="Formula 1 news, reports & live telemetry"
+        path="/"
+        image={featured?.imageUrl}
+      />
       <Header />
 
       {/* Hero / Featured Article */}

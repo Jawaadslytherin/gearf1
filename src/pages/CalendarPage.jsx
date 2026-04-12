@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Seo from '../components/Seo';
 import { Badge } from '../components/ui/Badge';
 import { MapPin, Calendar as CalendarIcon, Clock, ChevronRight, Flag } from 'lucide-react';
 
@@ -39,6 +40,11 @@ export default function CalendarPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title="2026 F1 race calendar"
+        path="/calendar"
+        description="Formula 1 2026 schedule: rounds, circuits, dates, and session times — GearUp F1."
+      />
       <Header />
 
       {/* Hero — Next Race Spotlight */}

@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { login as apiLogin } from '../lib/api';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
+import Seo from '../components/Seo';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -38,6 +39,13 @@ export default function LoginPage() {
 
   return (
     <div className="relative flex min-h-screen">
+      <Seo
+        title="Admin sign in"
+        path="/admin/login"
+        description="Sign in to manage GearUp F1 articles."
+        image="/logo.svg"
+        noindex
+      />
       {/* Left side — F1 background */}
       <div className="hidden lg:flex lg:w-1/2 relative items-end p-12">
         <img

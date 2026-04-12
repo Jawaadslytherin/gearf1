@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Trophy, ChevronRight } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Seo from '../components/Seo';
 import { Badge } from '../components/ui/Badge';
 
 const DRIVERS = [
@@ -37,6 +38,12 @@ export default function DriversPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title="2026 F1 driver grid"
+        path="/drivers"
+        description="Full Formula 1 2026 grid: teams, driver numbers, and profiles — GearUp F1."
+        image="/drivers/lando-norris.png"
+      />
       <Header />
 
       {/* Hero */}
