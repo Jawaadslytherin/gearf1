@@ -1,28 +1,16 @@
-import { useSyncExternalStore, lazy, Suspense } from 'react';
+import { useSyncExternalStore } from 'react';
 
-// Lazy-loaded so embed bundles don't block initial render
-const TwitterTweetEmbed = lazy(() =>
-  import('react-twitter-embed').then((m) => ({ default: m.TwitterTweetEmbed }))
-);
-const InstagramEmbed = lazy(() =>
-  import('react-social-media-embed').then((m) => ({ default: m.InstagramEmbed }))
-);
-
-const EmbedSkeleton = () => (
-  <div className="w-full max-w-[550px] h-32 animate-pulse bg-border rounded-lg" />
-);
-
-// useSyncExternalStore is the React-recommended way to detect client vs prerender
-// without triggering the react-hooks/set-state-in-effect lint rule
 const _noop = () => () => {};
 function useIsClient() {
   return useSyncExternalStore(_noop, () => true, () => false);
 }
 
+/**
+ * X (Twitter) + Instagram via official-style iframes — no react-twitter-embed / react-social-media-embed
+ * (those packages only declare React ≤18 peers and break npm install on React 19 / Vercel).
+ */
 export default function SocialEmbed({ url }) {
-  // Only render on the client — keeps prerendered HTML embed-free for SEO
   const isClient = useIsClient();
-
   if (!url || !isClient) return null;
 
   if (url.includes('twitter.com') || url.includes('x.com')) {
@@ -30,17 +18,38 @@ export default function SocialEmbed({ url }) {
     const tweetId = match ? match[1] : null;
     if (!tweetId) return null;
     return (
-      <Suspense fallback={<EmbedSkeleton />}>
-        <TwitterTweetEmbed tweetId={tweetId} />
-      </Suspense>
+      <div className="my-6 w-full max-w-[550px] overflow-hidden rounded-lg border border-border bg-card/40">
+        <iframe
+          title="X post"
+          src={`https://platform.twitter.com/embed/Tweet.html?id=${tweetId}&dnt=true`}
+          width={550}
+          style={{ border: 0, maxWidth: '100%', minHeight: 420, height: 'auto' }}
+          loading="lazy"
+          sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+        />
+      </div>
     );
   }
 
   if (url.includes('instagram.com')) {
+    const reel = url.match(/instagram\.com\/reel\/([^/?#]+)/);
+    const post = url.match(/instagram\.com\/p\/([^/?#]+)/);
+    const id = reel?.[1] || post?.[1];
+    if (!id) return null;
+    const path = reel ? `reel/${id}` : `p/${id}`;
     return (
-      <Suspense fallback={<EmbedSkeleton />}>
-        <InstagramEmbed url={url} width={550} />
-      </Suspense>
+      <div className="my-6 w-full max-w-[540px] overflow-hidden rounded-lg border border-border bg-card/40">
+        <iframe
+          title="Instagram post"
+          src={`https://www.instagram.com/${path}/embed/?cr=1&v=14`}
+          width={540}
+          height={580}
+          style={{ border: 0, maxWidth: '100%' }}
+          loading="lazy"
+          allowTransparency
+          sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+        />
+      </div>
     );
   }
 
