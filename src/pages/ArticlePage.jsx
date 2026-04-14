@@ -116,6 +116,11 @@ export default function ArticlePage() {
             <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground leading-tight mb-2">
               {article.title}
             </h1>
+            {article.subheading && (
+              <p className="font-display text-lg sm:text-xl text-muted-foreground leading-snug mb-3">
+                {article.subheading}
+              </p>
+            )}
             {article.articleCredit && (
               <p className="font-body text-sm text-muted-foreground mb-2">
                 {article.articleCredit}
