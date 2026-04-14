@@ -140,6 +140,13 @@ export default function ArticlePage() {
             {Array.isArray(article.content) && article.content.length > 0 ? (
               <div className="font-body text-foreground leading-relaxed space-y-4">
                 {article.content.map((block, index) => {
+                  if (block.type === 'subheading') {
+                    return (
+                      <h2 key={index} className="font-display text-lg font-bold text-foreground mt-6 mb-1">
+                        {block.text}
+                      </h2>
+                    );
+                  }
                   if (block.type === 'paragraph') {
                     return (
                       <p key={index} className="whitespace-pre-wrap">
