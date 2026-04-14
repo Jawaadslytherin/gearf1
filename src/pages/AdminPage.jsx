@@ -17,6 +17,7 @@ export default function AdminPage() {
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState({
     title: '',
+    subheading: '',
     category: 'Race Report',
     excerpt: '',
     content: [],
@@ -47,6 +48,7 @@ export default function AdminPage() {
   function clearForm() {
     setForm({
       title: '',
+      subheading: '',
       category: 'Race Report',
       excerpt: '',
       content: [],
@@ -153,6 +155,7 @@ export default function AdminPage() {
         : [];
     setForm({
       title: article.title,
+      subheading: article.subheading || '',
       category: article.category,
       excerpt: article.excerpt || '',
       content,
@@ -230,6 +233,19 @@ export default function AdminPage() {
                 placeholder="e.g. Big match preview"
                 className="f1-dashboard-input"
                 required
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-white/70 uppercase tracking-wider mb-2">
+                Subheading
+              </label>
+              <input
+                type="text"
+                value={form.subheading}
+                onChange={(e) => setForm((f) => ({ ...f, subheading: e.target.value }))}
+                placeholder="e.g. A closer look at the title fight"
+                className="f1-dashboard-input"
               />
             </div>
 
