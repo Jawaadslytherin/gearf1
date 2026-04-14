@@ -64,9 +64,10 @@ export default function AdminPage() {
 
   function addBlock(type) {
     const block =
-      type === 'paragraph' ? { type: 'paragraph', text: '' }
-      : type === 'embed'   ? { type: 'embed', url: '' }
-      :                      { type: 'divider' };
+      type === 'paragraph'  ? { type: 'paragraph', text: '' }
+      : type === 'embed'    ? { type: 'embed', url: '' }
+      : type === 'subheading' ? { type: 'subheading', text: '' }
+      :                       { type: 'divider' };
     setForm((f) => ({ ...f, content: [...f.content, block] }));
   }
 
@@ -290,10 +291,11 @@ export default function AdminPage() {
                         style={{
                           color: block.type === 'embed' ? '#00d4ff'
                                : block.type === 'divider' ? '#737373'
+                               : block.type === 'subheading' ? '#f59e0b'
                                : '#a3a3a3',
                         }}
                       >
-                        {block.type === 'embed' ? 'Embed' : block.type === 'divider' ? 'Divider' : 'Paragraph'}
+                        {block.type === 'embed' ? 'Embed' : block.type === 'divider' ? 'Divider' : block.type === 'subheading' ? 'Subheading' : 'Paragraph'}
                       </span>
                       <div className="flex items-center gap-1">
                         <button
@@ -318,7 +320,15 @@ export default function AdminPage() {
                         >×</button>
                       </div>
                     </div>
-                    {block.type === 'paragraph' ? (
+                    {block.type === 'subheading' ? (
+                      <input
+                        type="text"
+                        value={block.text}
+                        onChange={(e) => updateBlock(i, { text: e.target.value })}
+                        placeholder="Section heading..."
+                        className="f1-dashboard-input font-bold"
+                      />
+                    ) : block.type === 'paragraph' ? (
                       <textarea
                         value={block.text}
                         onChange={(e) => updateBlock(i, { text: e.target.value })}
@@ -341,6 +351,14 @@ export default function AdminPage() {
                 ))}
               </div>
               <div className="flex gap-2 mt-3 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => addBlock('subheading')}
+                  className="f1-dashboard-btn-ghost text-sm"
+                  style={{ color: '#f59e0b', borderColor: 'rgba(245,158,11,0.3)' }}
+                >
+                  + Subheading
+                </button>
                 <button
                   type="button"
                   onClick={() => addBlock('paragraph')}
