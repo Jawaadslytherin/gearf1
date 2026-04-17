@@ -61,11 +61,13 @@ function buildArticleHtml(article, slug, siteUrl, scriptTag, linkTag) {
     article.excerpt &&
     `<p style="font-size:1.05rem;color:#d4d4d4;line-height:1.6;border-left:4px solid #ef4444;padding-left:1rem;margin:0 0 1.5rem">${escapeHtml(article.excerpt)}</p>`;
 
-  // Render body content — structured blocks take priority over legacy body string
   const bodyHtml =
     Array.isArray(article.content) && article.content.length > 0
       ? article.content
           .map((block) => {
+            if (block.type === 'subheading') {
+              return `<h2 style="font-size:1.2rem;font-weight:700;margin:1.5rem 0 0.5rem;color:#fafafa">${escapeHtml(block.text || '')}</h2>`;
+            }
             if (block.type === 'paragraph') {
               return `<p style="white-space:pre-wrap;margin:0 0 1rem;font-size:1rem;color:#e5e5e5">${escapeHtml(block.text || '')}</p>`;
             }
@@ -73,7 +75,6 @@ function buildArticleHtml(article, slug, siteUrl, scriptTag, linkTag) {
               return `<hr style="border:none;border-top:1px solid #27272a;margin:1.5rem 0" />`;
             }
             if (block.type === 'embed' && block.url) {
-              // Embeds are client-only; expose the URL as a link so crawlers see the reference
               return `<p style="font-size:0.875rem;color:#737373;margin:0 0 1rem"><a href="${escapeAttr(block.url)}" rel="noopener noreferrer" style="color:#ef4444">${escapeHtml(block.url)}</a></p>`;
             }
             return '';
@@ -94,91 +95,3 @@ function buildArticleHtml(article, slug, siteUrl, scriptTag, linkTag) {
       </article>
       <p style="margin-top:2rem;font-size:13px"><a href="/blog" style="color:#ef4444;text-decoration:none">More articles</a> · <a href="/calendar" style="color:#ef4444;text-decoration:none">Calendar</a> · <a href="/drivers" style="color:#ef4444;text-decoration:none">Drivers</a></p>
     </div>`.trim();
-
-  return `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>${escapeHtml(pageTitle)}</title>
-    <meta name="description" content="${escapeAttr(desc)}" />
-    <link rel="canonical" href="${escapeAttr(pageUrl)}" />
-    <meta property="og:title" content="${escapeAttr(pageTitle)}" />
-    <meta property="og:description" content="${escapeAttr(desc)}" />
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="${escapeAttr(pageUrl)}" />
-    <meta property="og:image" content="${escapeAttr(ogImage)}" />
-    <meta property="og:site_name" content="GearUp F1" />
-    ${published ? `<meta property="article:published_time" content="${escapeAttr(published)}" />` : ''}
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="${escapeAttr(pageTitle)}" />
-    <meta name="twitter:description" content="${escapeAttr(desc)}" />
-    <meta name="twitter:image" content="${escapeAttr(ogImage)}" />
-    <script type="application/ld+json">${jsonLd}</script>
-    ${linkTag}
-    ${scriptTag}
-  </head>
-  <body>
-    <div id="root">${inner}</div>
-  </body>
-</html>
-`;
-}
-
-async function main() {
-  loadEnvFiles(root);
-  const SITE_URL = (process.env.VITE_SITE_URL || 'https://gearupf1.com').replace(/\/$/, '');
-  const API_BASE = (process.env.VITE_API_URL || 'http://127.0.0.1:3001').replace(/\/$/, '');
-
-  const indexPath = join(distDir, 'index.html');
-  let baseHtml;
-  try {
-    baseHtml = readFileSync(indexPath, 'utf8');
-  } catch {
-    console.error('[prerender] dist/index.html missing — run vite build first');
-    process.exit(1);
-  }
-
-  const { js, css } = extractAssets(baseHtml);
-  if (!js || !css) {
-    console.error('[prerender] Could not parse script/link from dist/index.html');
-    process.exit(1);
-  }
-  const scriptTag = `<script type="module" crossorigin src="${js}"></script>`;
-  const linkTag = `<link rel="stylesheet" crossorigin href="${css}">`;
-
-  let articles = [];
-  try {
-    const res = await fetch(`${API_BASE}/api/articles?limit=500`, {
-      headers: { Accept: 'application/json' },
-    });
-    if (!res.ok) throw new Error(String(res.status));
-    const data = await res.json();
-    articles = Array.isArray(data.articles) ? data.articles : [];
-  } catch (e) {
-    console.warn('[prerender] API unavailable; skipping article prerender:', e.message);
-    return;
-  }
-
-  let count = 0;
-  for (const article of articles) {
-    if (!article.slug) continue;
-    if (article.slug.includes('/') || article.slug.includes('\\')) {
-      console.warn('[prerender] skip unsafe slug:', article.slug);
-      continue;
-    }
-    const slug = article.slug;
-    const outDir = join(distDir, 'article', slug);
-    mkdirSync(outDir, { recursive: true });
-    const html = buildArticleHtml(article, slug, SITE_URL, scriptTag, linkTag);
-    writeFileSync(join(outDir, 'index.html'), html, 'utf8');
-    count++;
-  }
-  console.log(`[prerender] wrote ${count} article page(s) under dist/article/<slug>/index.html`);
-}
-
-main().catch((err) => {
-  console.error('[prerender]', err);
-  process.exit(1);
-});
