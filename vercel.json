@@ -1,10 +1,10 @@
 {
   "routes": [
-    { "handle": "filesystem" },
     {
       "src": "/sitemap.xml",
       "dest": "https://gearf1backend-production.up.railway.app/api/sitemap"
     },
+    { "handle": "filesystem" },
     {
       "src": "/robots.txt",
       "dest": "/robots.txt"
