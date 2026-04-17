@@ -3,7 +3,7 @@
     { "handle": "filesystem" },
     {
       "src": "/sitemap.xml",
-      "dest": "/sitemap.xml"
+      "dest": "https://gearf1backend-production.up.railway.app/api/sitemap"
     },
     {
       "src": "/robots.txt",
