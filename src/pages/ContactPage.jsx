@@ -19,7 +19,7 @@ export default function ContactPage() {
           Questions about our coverage, corrections, or collaborations? Reach out by email. We read
           every message; response time varies during race weekends.
         </p>
-        
+        <a
           href="mailto:gearupf1@gmail.com"
           className="inline-flex items-center gap-2 rounded-lg border border-border bg-card/60 px-4 py-3 font-body text-sm text-foreground no-underline hover:border-primary/40 transition-colors"
         >
