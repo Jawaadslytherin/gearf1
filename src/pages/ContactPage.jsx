@@ -19,12 +19,12 @@ export default function ContactPage() {
           Questions about our coverage, corrections, or collaborations? Reach out by email. We read
           every message; response time varies during race weekends.
         </p>
-        <a
-          href="mailto:hello@gearupf1.com"
+        
+          href="mailto:gearupf1@gmail.com"
           className="inline-flex items-center gap-2 rounded-lg border border-border bg-card/60 px-4 py-3 font-body text-sm text-foreground no-underline hover:border-primary/40 transition-colors"
         >
           <Mail className="h-4 w-4 text-primary" />
-          hello@gearupf1.com
+          gearupf1@gmail.com
         </a>
         <nav className="mt-10 flex flex-wrap gap-x-6 gap-y-2 font-body text-sm">
           <Link to="/about" className="text-primary no-underline hover:text-primary/90">About</Link>
