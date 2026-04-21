@@ -4,6 +4,10 @@
       "src": "/sitemap.xml",
       "dest": "https://gearf1backend-production.up.railway.app/api/sitemap"
     },
+    {
+      "src": "/article/(?<slug>[^/]+)",
+      "dest": "https://gearf1backend-production.up.railway.app/api/og/$slug"
+    },
     { "handle": "filesystem" },
     {
       "src": "/robots.txt",
