@@ -152,9 +152,14 @@ export default function ArticlePage() {
                     if (isHtml) {
                       const clean = (block.text || '')
                         .replace(/\s*style="[^"]*"/gi, '')
-                        .replace(/\n/g, '<br />');
+                        .replace(/<p>/gi, '')
+                        .replace(/<\/p>/gi, '<br />')
+                        .replace(/<div>/gi, '')
+                        .replace(/<\/div>/gi, '<br />')
+                        .replace(/(<br\s*\/?>\s*){2,}/gi, '<br />')
+                        .replace(/^(<br\s*\/?>)+|(<br\s*\/?>)+$/gi, '');
                       return (
-                        <p key={index} className="text-foreground mb-4" dangerouslySetInnerHTML={{ __html: clean }} />
+                        <div key={index} className="text-foreground mb-4 leading-relaxed" dangerouslySetInnerHTML={{ __html: clean }} />
                       );
                     }
                     return (
