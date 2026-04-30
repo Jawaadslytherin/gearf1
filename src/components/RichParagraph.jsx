@@ -54,9 +54,10 @@ export default function RichParagraph({ value, onChange, placeholder }) {
     document.execCommand('insertHTML', false, content);
     onChange(editorRef.current?.innerHTML || '');
   }, [onChange]);
+
+  const handleInput = useCallback(() => {
     const el = editorRef.current;
     if (!el) return;
-    // Strip any inline styles injected by the browser's execCommand
     const clean = el.innerHTML.replace(/\s*style="[^"]*"/gi, '');
     onChange(clean);
   }, [onChange]);
