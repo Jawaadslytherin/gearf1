@@ -246,6 +246,7 @@ export default function RichParagraph({ value, onChange, placeholder }) {
           wordBreak: 'break-word',
           resize: 'vertical',
           overflow: 'auto',
+          WebkitTextFillColor: '#fafafa',
         }}
       />
       <style>{`
