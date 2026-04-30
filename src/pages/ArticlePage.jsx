@@ -148,8 +148,13 @@ export default function ArticlePage() {
                     );
                   }
                   if (block.type === 'paragraph') {
-                    return (
-                      <p key={index} className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: block.text }} />
+                    const isHtml = /<[a-z][\s\S]*>/i.test(block.text || '');
+                    return isHtml ? (
+                      <p key={index} className="text-foreground [&_a]:text-primary [&_a]:underline" dangerouslySetInnerHTML={{ __html: block.text }} />
+                    ) : (
+                      <p key={index} className="whitespace-pre-wrap text-foreground">
+                        {block.text}
+                      </p>
                     );
                   }
                   if (block.type === 'divider') {
