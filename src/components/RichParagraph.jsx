@@ -22,7 +22,9 @@ export default function RichParagraph({ value, onChange, placeholder }) {
   const handleInput = useCallback(() => {
     const el = editorRef.current;
     if (!el) return;
-    onChange(el.innerHTML);
+    // Strip any inline styles injected by the browser's execCommand
+    const clean = el.innerHTML.replace(/\s*style="[^"]*"/gi, '');
+    onChange(clean);
   }, [onChange]);
 
   const saveRange = useCallback(() => {
