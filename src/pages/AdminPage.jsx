@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getArticles, createArticle, updateArticle, deleteArticle, uploadImage } from '../lib/api';
 import Seo from '../components/Seo';
+import RichParagraph from '../components/RichParagraph';
 
 const CATEGORIES = ['Race Report', 'Qualifying', 'Practice', 'Analysis', 'Tech', 'Drivers', 'Teams', 'News'];
 
@@ -329,12 +330,10 @@ export default function AdminPage() {
                         className="f1-dashboard-input font-bold"
                       />
                     ) : block.type === 'paragraph' ? (
-                      <textarea
+                      <RichParagraph
                         value={block.text}
-                        onChange={(e) => updateBlock(i, { text: e.target.value })}
-                        placeholder="Paragraph text..."
-                        rows={4}
-                        className="f1-dashboard-input resize-y"
+                        onChange={(html) => updateBlock(i, { text: html })}
+                        placeholder="Paragraph text... (select text to add a hyperlink)"
                       />
                     ) : block.type === 'embed' ? (
                       <input
