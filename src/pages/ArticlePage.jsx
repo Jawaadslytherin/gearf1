@@ -138,7 +138,7 @@ export default function ArticlePage() {
               </p>
             )}
             {Array.isArray(article.content) && article.content.length > 0 ? (
-              <div className="font-body text-foreground leading-relaxed space-y-4">
+              <div className="font-body text-foreground leading-relaxed space-y-4 [&_a]:text-primary [&_a]:underline [&_a:hover]:text-primary/80">
                 {article.content.map((block, index) => {
                   if (block.type === 'subheading') {
                     return (
@@ -149,9 +149,7 @@ export default function ArticlePage() {
                   }
                   if (block.type === 'paragraph') {
                     return (
-                      <p key={index} className="whitespace-pre-wrap">
-                        {block.text}
-                      </p>
+                      <p key={index} className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: block.text }} />
                     );
                   }
                   if (block.type === 'divider') {
