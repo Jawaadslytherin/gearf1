@@ -19,7 +19,41 @@ export default function RichParagraph({ value, onChange, placeholder }) {
     }
   }, [value]);
 
-  const handleInput = useCallback(() => {
+  const handlePaste = useCallback((e) => {
+    e.preventDefault();
+    const html = e.clipboardData.getData('text/html');
+    const plain = e.clipboardData.getData('text/plain');
+
+    let content = '';
+    if (html) {
+      // Parse the pasted HTML
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+
+      // Extract links and plain text, preserving line breaks
+      const processNode = (node) => {
+        if (node.nodeType === Node.TEXT_NODE) return node.textContent;
+        if (node.nodeName === 'A') {
+          const href = node.getAttribute('href');
+          const text = node.textContent;
+          if (href && text) return `<a href="${href}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+          return text;
+        }
+        if (['P', 'DIV', 'BR'].includes(node.nodeName)) {
+          const inner = Array.from(node.childNodes).map(processNode).join('');
+          return inner + '\n';
+        }
+        return Array.from(node.childNodes).map(processNode).join('');
+      };
+
+      content = Array.from(doc.body.childNodes).map(processNode).join('').replace(/\n+$/, '');
+    } else {
+      content = plain;
+    }
+
+    document.execCommand('insertHTML', false, content);
+    onChange(editorRef.current?.innerHTML || '');
+  }, [onChange]);
     const el = editorRef.current;
     if (!el) return;
     // Strip any inline styles injected by the browser's execCommand
@@ -192,6 +226,7 @@ export default function RichParagraph({ value, onChange, placeholder }) {
         contentEditable
         suppressContentEditableWarning
         onInput={handleInput}
+        onPaste={handlePaste}
         onMouseUp={handleMouseUp}
         onKeyUp={handleKeyUp}
         onBlur={() => { onChange(editorRef.current?.innerHTML || ''); }}
