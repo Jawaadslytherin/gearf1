@@ -150,9 +150,11 @@ export default function ArticlePage() {
                   if (block.type === 'paragraph') {
                     const isHtml = /<[a-z][\s\S]*>/i.test(block.text || '');
                     if (isHtml) {
-                      const clean = (block.text || '').replace(/\s*style="[^"]*"/gi, '');
+                      const clean = (block.text || '')
+                        .replace(/\s*style="[^"]*"/gi, '')
+                        .replace(/\n/g, '<br />');
                       return (
-                        <p key={index} className="text-foreground mb-4 [&_a]:text-primary [&_a]:underline" dangerouslySetInnerHTML={{ __html: clean }} />
+                        <p key={index} className="text-foreground mb-4" dangerouslySetInnerHTML={{ __html: clean }} />
                       );
                     }
                     return (
