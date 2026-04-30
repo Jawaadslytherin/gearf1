@@ -150,14 +150,13 @@ export default function ArticlePage() {
                   if (block.type === 'paragraph') {
                     const isHtml = /<[a-z][\s\S]*>/i.test(block.text || '');
                     if (isHtml) {
-                      // Strip any inline color/font styles injected by contenteditable
                       const clean = (block.text || '').replace(/\s*style="[^"]*"/gi, '');
                       return (
-                        <p key={index} className="text-foreground [&_a]:text-primary [&_a]:underline" dangerouslySetInnerHTML={{ __html: clean }} />
+                        <p key={index} className="text-foreground mb-4 [&_a]:text-primary [&_a]:underline" dangerouslySetInnerHTML={{ __html: clean }} />
                       );
                     }
                     return (
-                      <p key={index} className="whitespace-pre-wrap text-foreground">
+                      <p key={index} className="whitespace-pre-wrap text-foreground mb-4">
                         {block.text}
                       </p>
                     );
